@@ -8,9 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\change.png" />
+    <None Remove="Resources\Images\close.png" />
+    <None Remove="Resources\Images\plus.png" />
+    <None Remove="Resources\Images\rename.png" />
+    <None Remove="Resources\Images\trashcan.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
     <PackageReference Include="Microsoft.WindowsAPICodePack-Shell" Version="1.1.0" />
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\change.png" />
+    <Resource Include="Resources\Images\close.png" />
+    <Resource Include="Resources\Images\plus.png" />
+    <Resource Include="Resources\Images\rename.png" />
+    <Resource Include="Resources\Images\trashcan.png" />
   </ItemGroup>
 
 </Project>

@@ -7,13 +7,41 @@ namespace FeatureBranch.ViewModels;
 
 public class RepositoryViewModel : BaseViewModel
 {
+    private BranchesViewModel? _branchesViewModel;
+
+    private CurrentChangesViewModel? _currentChangesViewModel;
+
     private string? _currentDirectory;
 
     private Repository? _repository;
 
     private ICommand? _selectDirectoryCommand;
 
-    public BranchesViewModel? BranchesViewModel { get; private set; }
+    public BranchesViewModel? BranchesViewModel
+    {
+        get
+        {
+            return _branchesViewModel;
+        }
+        private set
+        {
+            _branchesViewModel = value;
+            OnPropertyChanged(nameof(BranchesViewModel));
+        }
+    }
+
+    public CurrentChangesViewModel? CurrentChangesViewModel
+    {
+        get
+        {
+            return _currentChangesViewModel;
+        }
+        private set
+        {
+            _currentChangesViewModel = value;
+            OnPropertyChanged(nameof(CurrentChangesViewModel));
+        }
+    }
 
     public string CurrentDirectoryDisplay => _currentDirectory is null
         ? "Select A Directory"
@@ -42,7 +70,7 @@ public class RepositoryViewModel : BaseViewModel
         {
             _repository = new Repository(_currentDirectory);
             BranchesViewModel = new BranchesViewModel(_repository.Branches);
-            OnPropertyChanged(nameof(BranchesViewModel));
+            CurrentChangesViewModel = new CurrentChangesViewModel(_repository);
         }
     }
 

@@ -6,9 +6,9 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <TabControl MinHeight="400" TabStripPlacement="Left">
+    <TabControl MinHeight="400" TabStripPlacement="Left" Padding="0">
         <TabControl.Resources>
-            <Style TargetType="{x:Type TabItem}">
+            <Style TargetType="TabItem">
                 <Setter Property="HeaderTemplate">
                     <Setter.Value>
                         <DataTemplate>
@@ -20,6 +20,32 @@
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border Name="Border"
+                                    BorderThickness="4 0 0 0"
+                                    BorderBrush="Gainsboro"
+                                    Padding="0 10">
+                                <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="LightSkyBlue" />
+                                    <Setter TargetName="Border" Property="Background" Value="#CCEEEEEE" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="GhostWhite" />
+                                    <Setter TargetName="Border" Property="Background" Value="GhostWhite" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="Padding" Value="3" />
             </Style>
         </TabControl.Resources>
@@ -28,7 +54,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding FriendlyName}" />
+                            <TextBlock Text="{Binding FriendlyName}" Padding="5" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -36,7 +62,7 @@
         </TabItem>
         <TabItem Header="Features">
             <DockPanel>
-                <Button DockPanel.Dock="Top" Content="Create New Branch" />
+                <Button DockPanel.Dock="Top" Content="Create New Branch" Command="{Binding CreateNewBranchCommand}" />
                 <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding FeatureBranches}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -50,7 +76,7 @@
         </TabItem>
         <TabItem Header="Bugs">
             <DockPanel>
-                <Button DockPanel.Dock="Top" Content="Create New Branch" />
+                <Button DockPanel.Dock="Top" Content="Create New Branch" Command="{Binding CreateNewBranchCommand}" />
                 <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding BugBranches}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -64,6 +90,17 @@
         </TabItem>
         <TabItem Header="Cherrypicks">
             <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding CherrypickBranches}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding FriendlyName}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </TabItem>
+        <TabItem Header="Other">
+            <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding OtherBranches}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
