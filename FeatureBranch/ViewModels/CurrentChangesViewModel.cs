@@ -34,9 +34,11 @@ public class CurrentChangesViewModel : BaseViewModel, IDisposable
 
     private readonly RenamedEventHandler _renamedEventHandler;
 
-    private Repository _repository;
+    private readonly Repository _repository;
 
     private IEnumerable<StatusEntryViewModel> _status;
+
+    private TreeChanges _unstagedDifferences;
 
     public IEnumerable<StatusEntryViewModel> Status
     {
@@ -51,12 +53,28 @@ public class CurrentChangesViewModel : BaseViewModel, IDisposable
         }
     }
 
+    public TreeChanges UnstagedDifferences
+    {
+        get
+        {
+            return _unstagedDifferences;
+        }
+        private set
+        {
+            _unstagedDifferences = value;
+
+            OnPropertyChanged(nameof(UnstagedDifferences));
+        }
+    }
+
     private void HandleFileSystemChange()
     {
         var status = _repository.RetrieveStatus();
         Status = status
             .Select(x => new StatusEntryViewModel(x))
             .ToList();
+
+        UnstagedDifferences = _repository.Diff.Compare<TreeChanges>(paths: null, includeUntracked: true);
     }
 
     public void Dispose()
