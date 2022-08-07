@@ -36,45 +36,36 @@ public class CurrentChangesViewModel : BaseViewModel, IDisposable
 
     private readonly Repository _repository;
 
-    private IEnumerable<StatusEntryViewModel> _status;
+    private IEnumerable<StatusEntryViewModel> _indexChanges;
 
-    private TreeChanges _unstagedDifferences;
+    private IEnumerable<StatusEntryViewModel> _workingDirectoryChanges;
 
-    public IEnumerable<StatusEntryViewModel> Status
+    public IEnumerable<StatusEntryViewModel> IndexChanges
     {
         get
         {
-            return _status;
+            return _indexChanges;
         }
         private set
         {
-            _status = value;
-            OnPropertyChanged(nameof(Status));
+            _indexChanges = value;
+
+            OnPropertyChanged(nameof(IndexChanges));
         }
     }
 
-    public TreeChanges UnstagedDifferences
+    public IEnumerable<StatusEntryViewModel> WorkingDirectoryChanges
     {
         get
         {
-            return _unstagedDifferences;
+            return _workingDirectoryChanges;
         }
         private set
         {
-            _unstagedDifferences = value;
+            _workingDirectoryChanges = value;
 
-            OnPropertyChanged(nameof(UnstagedDifferences));
+            OnPropertyChanged(nameof(WorkingDirectoryChanges));
         }
-    }
-
-    private void HandleFileSystemChange()
-    {
-        var status = _repository.RetrieveStatus();
-        Status = status
-            .Select(x => new StatusEntryViewModel(x))
-            .ToList();
-
-        UnstagedDifferences = _repository.Diff.Compare<TreeChanges>(paths: null, includeUntracked: true);
     }
 
     public void Dispose()
@@ -90,4 +81,21 @@ public class CurrentChangesViewModel : BaseViewModel, IDisposable
     public void FileCreatedChangedOrDeleted(object source, FileSystemEventArgs args) => HandleFileSystemChange();
 
     public void FileRenamed(object source, RenamedEventArgs args) => HandleFileSystemChange();
+
+    public void HandleFileSystemChange()
+    {
+        WorkingDirectoryChanges = _repository.RetrieveStatus(new StatusOptions()
+        {
+            Show = StatusShowOption.WorkDirOnly,
+            IncludeUntracked = true,
+            DetectRenamesInWorkDir = true
+        }).Select(x => new StatusEntryViewModel(x)).ToList();
+
+        IndexChanges = _repository.RetrieveStatus(new StatusOptions()
+        {
+            Show = StatusShowOption.IndexOnly,
+            IncludeUntracked = true,
+            DetectRenamesInIndex = true
+        }).Select(x => new StatusEntryViewModel(x)).ToList();
+    }
 }
