@@ -15,9 +15,8 @@
                         <Border Name="Border">
                             <ContentPresenter x:Name="ContentSite"
                                             VerticalAlignment="Center"
-                                            HorizontalAlignment="Left"
-                                            ContentSource="Content"
-                                            Margin="10,2" />
+                                            HorizontalAlignment="Stretch"
+                                            ContentSource="Content" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">

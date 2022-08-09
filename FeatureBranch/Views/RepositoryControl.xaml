@@ -42,10 +42,10 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <views:BranchesControl
+            <views:BranchesSidebarControl
                 Grid.Column="0"
                 Width="300"
-                DataContext="{Binding BranchesViewModel}" />
+                DataContext="{Binding BranchesSidebarViewModel}" />
 
             <views:CurrentChangesControl
                 Grid.Column="1"

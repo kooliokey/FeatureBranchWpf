@@ -2,7 +2,6 @@
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -10,20 +9,22 @@ using System.Windows.Input;
 
 namespace FeatureBranch.ViewModels;
 
-public class BranchesViewModel : BaseViewModel
+public class BranchesSidebarViewModel : BaseViewModel
 {
-    public BranchesViewModel(BranchCollection branches)
+    public BranchesSidebarViewModel(Repository repository)
     {
-        BugBranches = new ObservableCollection<Branch>();
-        FeatureBranches = new ObservableCollection<Branch>();
-        CherrypickBranches = new ObservableCollection<Branch>();
-        LongLivedBranches = new ObservableCollection<Branch>();
-        OtherBranches = new ObservableCollection<Branch>();
+        _repository = repository;
 
-        SetBranches(branches);
+        CurrentBranch = _repository.Head.FriendlyName;
+
+        SetBranches(_repository.Branches);
     }
 
+    private readonly Repository _repository;
+
     private ICommand? _createNewBranchCommand;
+
+    private string _currentBranch;
 
     public static readonly Regex BugBranchPattern = new(@"bug\/kroche\/([0-9]+).*");
 
@@ -49,9 +50,9 @@ public class BranchesViewModel : BaseViewModel
         "release/next"
     };
 
-    public ObservableCollection<Branch> BugBranches { get; private set; }
+    public BranchesListViewModel BugBranches { get; private set; }
 
-    public ObservableCollection<Branch> CherrypickBranches { get; private set; }
+    public BranchesListViewModel CherrypickBranches { get; private set; }
 
     public ICommand CreateNewBranchCommand
     {
@@ -66,11 +67,25 @@ public class BranchesViewModel : BaseViewModel
         }
     }
 
-    public ObservableCollection<Branch> FeatureBranches { get; private set; }
+    public string CurrentBranch
+    {
+        get
+        {
+            return _currentBranch;
+        }
+        set
+        {
+            _currentBranch = value;
 
-    public ObservableCollection<Branch> LongLivedBranches { get; private set; }
+            OnPropertyChanged(nameof(CurrentBranch));
+        }
+    }
 
-    public ObservableCollection<Branch> OtherBranches { get; private set; }
+    public BranchesListViewModel FeatureBranches { get; private set; }
+
+    public BranchesListViewModel LongLivedBranches { get; private set; }
+
+    public BranchesListViewModel OtherBranches { get; private set; }
 
     private void CreateNewBranch()
     {
@@ -79,34 +94,40 @@ public class BranchesViewModel : BaseViewModel
 
     public void SetBranches(BranchCollection branches)
     {
-        LongLivedBranches.Clear();
-        FeatureBranches.Clear();
-        BugBranches.Clear();
-        CherrypickBranches.Clear();
-        OtherBranches.Clear();
+        var bugBranches = new List<SingleBranchViewModel>();
+        var featureBranches = new List<SingleBranchViewModel>();
+        var cherrypickBranches = new List<SingleBranchViewModel>();
+        var longLivedBranches = new List<SingleBranchViewModel>();
+        var otherBranches = new List<SingleBranchViewModel>();
 
         foreach (var branch in branches)
         {
             if (LongLivedBranchNames.Contains(branch.FriendlyName))
             {
-                LongLivedBranches.Add(branch);
+                longLivedBranches.Add(new SingleBranchViewModel(branch));
             }
             else if (FeatureBranchPattern.IsMatch(branch.FriendlyName))
             {
-                FeatureBranches.Add(branch);
+                featureBranches.Add(new SingleBranchViewModel(branch));
             }
             else if (BugBranchPattern.IsMatch(branch.FriendlyName))
             {
-                BugBranches.Add(branch);
+                bugBranches.Add(new SingleBranchViewModel(branch));
             }
             else if (CherrypickBranchPattern.IsMatch(branch.FriendlyName))
             {
-                CherrypickBranches.Add(branch);
+                cherrypickBranches.Add(new SingleBranchViewModel(branch));
             }
             else
             {
-                OtherBranches.Add(branch);
+                otherBranches.Add(new SingleBranchViewModel(branch));
             }
         }
+
+        BugBranches = new BranchesListViewModel(bugBranches);
+        FeatureBranches = new BranchesListViewModel(featureBranches);
+        CherrypickBranches = new BranchesListViewModel(cherrypickBranches);
+        LongLivedBranches = new BranchesListViewModel(longLivedBranches);
+        OtherBranches = new BranchesListViewModel(otherBranches);
     }
 }

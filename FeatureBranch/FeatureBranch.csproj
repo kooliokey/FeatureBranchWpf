@@ -12,7 +12,12 @@
     <None Remove="Resources\Images\close.png" />
     <None Remove="Resources\Images\plus.png" />
     <None Remove="Resources\Images\rename.png" />
+    <None Remove="Resources\Images\star.png" />
     <None Remove="Resources\Images\trashcan.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\star.png" />
   </ItemGroup>
 
   <ItemGroup>

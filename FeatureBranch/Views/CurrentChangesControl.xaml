@@ -11,41 +11,32 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="0" ItemsSource="{Binding IndexChanges}">
+        <ListBox Grid.Row="0" ItemsSource="{Binding IndexChanges}" HorizontalAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <!--<Image Width="16" Height="16" Source="{Binding StateIcon}" Margin="0 0 5 0" />-->
-                            <TextBlock Text="{Binding FilePathDisplay}" />
-                        </StackPanel>
+                        <!--<Image Width="16" Height="16" Source="{Binding StateIcon}" Margin="0 0 5 0" />-->
+                        <TextBlock Grid.Column="0" Text="{Binding FilePathDisplay}" />
                         <TextBlock Grid.Column="1" Text="{Binding StateHint}" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding WorkingDirectoryChanges}">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                </Style>
-            </ListBox.ItemContainerStyle>
+        <ListBox Grid.Row="1" ItemsSource="{Binding WorkingDirectoryChanges}" HorizontalAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <!--<Image Width="16" Height="16" Source="{Binding StateIcon}" Margin="0 0 5 0" />-->
-                            <TextBlock Text="{Binding FilePathDisplay}" />
-                        </StackPanel>
+                        <!--<Image Width="16" Height="16" Source="{Binding StateIcon}" Margin="0 0 5 0" />-->
+                        <TextBlock Grid.Column="0" Text="{Binding FilePathDisplay}" />
                         <TextBlock Grid.Column="1" Text="{Binding StateHint}" />
                     </Grid>
                 </DataTemplate>

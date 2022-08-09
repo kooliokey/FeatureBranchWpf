@@ -7,7 +7,7 @@ namespace FeatureBranch.ViewModels;
 
 public class RepositoryViewModel : BaseViewModel
 {
-    private BranchesViewModel? _branchesViewModel;
+    private BranchesSidebarViewModel? _BranchesSidebarViewModel;
 
     private CurrentChangesViewModel? _currentChangesViewModel;
 
@@ -17,16 +17,16 @@ public class RepositoryViewModel : BaseViewModel
 
     private ICommand? _selectDirectoryCommand;
 
-    public BranchesViewModel? BranchesViewModel
+    public BranchesSidebarViewModel? BranchesSidebarViewModel
     {
         get
         {
-            return _branchesViewModel;
+            return _BranchesSidebarViewModel;
         }
         private set
         {
-            _branchesViewModel = value;
-            OnPropertyChanged(nameof(BranchesViewModel));
+            _BranchesSidebarViewModel = value;
+            OnPropertyChanged(nameof(BranchesSidebarViewModel));
         }
     }
 
@@ -69,7 +69,7 @@ public class RepositoryViewModel : BaseViewModel
         if (IsValidRepository.Value)
         {
             _repository = new Repository(_currentDirectory);
-            BranchesViewModel = new BranchesViewModel(_repository.Branches);
+            BranchesSidebarViewModel = new BranchesSidebarViewModel(_repository);
             CurrentChangesViewModel = new CurrentChangesViewModel(_repository);
         }
     }
